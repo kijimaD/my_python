@@ -12,17 +12,19 @@ FPSCLOCK = pygame.time.Clock()
 
 def main():
     """ メインルーチン """
-    walls = 80
+    walls = 160 # default: 80
     ship_y = 250
     velocity = 0
     score = 0
     slope = randint(1, 6)
+    updown_speed = 0 # デフォルトは3
     sysfont = pygame.font.SysFont(None, 36)
     ship_image = pygame.image.load("ship.png")
     bang_image = pygame.image.load("bang.png")
     holes = []
     for xpos in range(walls):
-        holes.append(Rect(xpos * 10, 100, 10, 400))
+        # holes.append(Rect(xpos * 10, 100, 10, 400))
+        holes.append(Rect(xpos * 5, 100, 5, 400))
     game_over = False
 
     while True:
@@ -38,7 +40,7 @@ def main():
         # 自機を移動
         if not game_over:
             score += 10
-            velocity += -3 if is_space_down else 3
+            velocity += (-1 * updown_speed) if is_space_down else updown_speed
             ship_y += velocity
 
             # 洞窟をスクロール
@@ -47,10 +49,10 @@ def main():
             if test.top <= 0 or test.bottom >= 600:
                 slope = randint(1, 6) * (-1 if slope > 0 else 1)
                 edge.inflate_ip(0, -20)
-            edge.move_ip(10, slope) # 描写位置を移動させる？
+            edge.move_ip(5, slope) # 描写位置を移動させる？
             holes.append(edge)
             del holes[0] # 左端を削除する
-            holes = [x.move(-10, 0) for x in holes] # すべて左に動かす
+            holes = [x.move(-5, 0) for x in holes] # すべて左に動かす
 
             # 衝突 ?
             # 接触するのはは常に一番左の矩形。それと、自機のy座標を比較する。自機が矩形の範囲内にある＝ゲーム続行
