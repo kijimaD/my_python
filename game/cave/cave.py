@@ -3,6 +3,7 @@ import sys
 from random import randint
 import pygame
 from pygame.locals import QUIT, Rect, KEYDOWN, K_SPACE
+import math
 
 pygame.init()
 pygame.key.set_repeat(5, 5)
@@ -49,7 +50,7 @@ def main():
             if test.top <= 0 or test.bottom >= 600:
                 slope = randint(1, 6) * (-1 if slope > 0 else 1)
                 edge.inflate_ip(0, -20)
-            edge.move_ip(5, slope) # 描写位置を移動させる？
+            edge.move_ip(5,slope) # 描写位置を移動させる？
             holes.append(edge)
             del holes[0] # 左端を削除する
             holes = [x.move(-5, 0) for x in holes] # すべて左に動かす
@@ -73,7 +74,7 @@ def main():
             SURFACE.blit(bang_image, (0, ship_y - 40))
 
         pygame.display.update()
-        FPSCLOCK.tick(15)
+        FPSCLOCK.tick(30)
 
 
 if __name__ == '__main__':
