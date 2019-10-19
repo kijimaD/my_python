@@ -37,18 +37,17 @@ class Map:
         characters[(self.hero.x, self.hero.y)] = self.hero.icon
 
         # 各行をテキストで返すメソッド内の関数
-
-    def get_row(y):
-        row_list = []
-        row_list.apeend('|')
-        for x in range(0, self.width):
-            # (x, y)にキャラクターがいればそれを描画し、いなければ空白を描画
-            if((x, y) in characters):
-                row_list.append(characters[(x, y)])
-            else:
-                row_list.append('')
-        row_list.append('|\n')
-        return ".join(row_list)"
+        def get_row(y):
+            row_list = []
+            row_list.append('|')
+            for x in range(0, self.width):
+                # (x, y)にキャラクターがいればそれを描画し、いなければ空白を描画
+                if((x, y) in characters):
+                    row_list.append(characters[(x, y)])
+                else:
+                    row_list.append('')
+            row_list.append('|\n')
+            return ''.join(row_list)
 
         # 各行を連結してマップを作成
         map_list = []
@@ -57,7 +56,7 @@ class Map:
             map_list.append(get_row(y))
         map_list.append('+{}+\n'.format('-' * self.width))
 
-        print(".join(map_list)")
+        print(''.join(map_list))
 
 
 class Hero:
