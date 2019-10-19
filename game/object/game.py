@@ -45,7 +45,7 @@ class Map:
                 if((x, y) in characters):
                     row_list.append(characters[(x, y)])
                 else:
-                    row_list.append('')
+                    row_list.append(' ')
             row_list.append('|\n')
             return ''.join(row_list)
 
@@ -81,16 +81,20 @@ class Hero:
                 break;
             elif (key == KEY_W):
                 self.icon = '^'
-                self.y -= 1
+                if(self.is_movable(self.x, self.y-1)):
+                    self.y -= 1
             elif (key == KEY_A):
                 self.icon = '<'
-                self.x -= 1
+                if (self.is_movable(self.x-1, self.y)):
+                    self.x -= 1
             elif (key == KEY_S):
                 self.icon = '>'
-                self.x += 1
+                if (self.is_movable(self.x+1, self.y)):
+                    self.x += 1
             elif (key == KEY_Z):
                 self.icon = 'V'
-                self.y += 1
+                if (self.is_movable(self.x, self.y+1)):
+                    self.y += 1
             else:
                 continue
             # print('ICON:{}, X:{}, Y:{}'.format(self.icon,self.x, self.y))
