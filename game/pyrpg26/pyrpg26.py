@@ -24,9 +24,9 @@ def load_image(dir, file, colorkey=None):
     file = os.path.join(dir, file)
     try:
         image = pygame.image.load(file)
-    except pygame.error, message:
-        print "Cannot load image:", file
-        raise SystemExit, message
+    except pygame.error:
+        print ("Cannot load image:")
+        raise SystemExit
     image = image.convert()
     if colorkey is not None:
         if colorkey is -1:
@@ -794,7 +794,7 @@ class MessageEngine:
             screen.blit(self.image, (x, y), (rect.x + self.color,
                                              rect.y, rect.width, rect.height))
         except KeyError:
-            print "描画できない文字があります:%s" % ch
+            print ("描画できない文字があります:")
             return
 
     def draw_string(self, screen, pos, str):
