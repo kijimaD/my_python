@@ -365,8 +365,8 @@ class Map:
         starty = offsety / GS
         endy = starty + SCR_RECT.height / GS + 1
         # マップの描画
-        for y in range(starty, endy):
-            for x in range(startx, endx):
+        for y in range(int(starty), int(endy)):
+            for x in range(int(startx), int(endx)):
                 # マップの範囲外はデフォルトイメージで描画
                 # この条件がないとマップの端に行くとエラー発生
                 if x < 0 or y < 0 or x > self.col - 1 or y > self.row - 1:
@@ -388,7 +388,7 @@ class Map:
         if x < 0 or x > self.col - 1 or y < 0 or y > self.row - 1:
             return False
         # マップチップは移動可能か？
-        if self.movable_type[self.map[y][x]] == 0:
+        if self.movable_type[self.map[int(y)][int(x)]] == 0:
             return False
         # キャラクターと衝突しないか？
         for chara in self.charas:
@@ -567,8 +567,9 @@ class Character:
                     self.moving = True
         # キャラクターアニメーション（frameに応じて描画イメージを切り替える）
         self.frame += 1
-        self.image = self.images[self.name][self.direction *
-                                            4 + self.frame / self.animcycle % 4]
+        self.image = self.images[self.name][int((self.direction *
+                                            4 + self.frame / self.animcycle % 4))]
+        # self.image = self.images[self.name][1]
 
     def draw(self, screen, offset):
         """オフセットを考慮してプレイヤーを描画"""
@@ -622,8 +623,8 @@ class Player(Character):
                         player.moving = False
         # キャラクターアニメーション（frameに応じて描画イメージを切り替える）
         self.frame += 1
-        self.image = self.images[self.name][self.direction *
-                                            4 + self.frame / self.animcycle % 4]
+        self.image = self.images[self.name][int(self.direction *
+                                            4 + self.frame / self.animcycle % 4)]
 
     def move_to(self, destx, desty):
         """現在位置から(destx,desty)への移動を開始"""
@@ -877,17 +878,17 @@ class MessageWindow(Window):
         for i in range(len(message)):
             ch = message[i]
             if ch == "/":  # /は改行文字
-                self.text[p] = "/"
+                self.text[int(p)] = "/"
                 p += self.MAX_CHARS_PER_LINE
                 p = (p / self.MAX_CHARS_PER_LINE) * self.MAX_CHARS_PER_LINE
             elif ch == "%":  # \fは改ページ文字
-                self.text[p] = "%"
+                self.text[int(p)] = "%"
                 p += self.MAX_CHARS_PER_PAGE
                 p = (p / self.MAX_CHARS_PER_PAGE) * self.MAX_CHARS_PER_PAGE
             else:
-                self.text[p] = ch
+                self.text[int(p)] = ch
                 p += 1
-        self.text[p] = "$"  # 終端文字
+        self.text[int(p)] = "$"  # 終端文字
         self.show()
 
     def update(self):
@@ -898,15 +899,15 @@ class MessageWindow(Window):
                 self.cur_pos += 1  # 1文字流す
                 # テキスト全体から見た現在位置
                 p = self.cur_page * self.MAX_CHARS_PER_PAGE + self.cur_pos
-                if self.text[p] == "/":  # 改行文字
+                if self.text[int(p)] == "/":  # 改行文字
                     self.cur_pos += self.MAX_CHARS_PER_LINE
                     self.cur_pos = (
                         self.cur_pos / self.MAX_CHARS_PER_LINE) * self.MAX_CHARS_PER_LINE
-                elif self.text[p] == "%":  # 改ページ文字
+                elif self.text[int(p)] == "%":  # 改ページ文字
                     self.cur_pos += self.MAX_CHARS_PER_PAGE
                     self.cur_pos = (
                         self.cur_pos / self.MAX_CHARS_PER_PAGE) * self.MAX_CHARS_PER_PAGE
-                elif self.text[p] == "$":  # 終端文字
+                elif self.text[int(p)] == "$":  # 終端文字
                     self.hide_flag = True
                 # 1ページの文字数に達したら▼を表示
                 if self.cur_pos % self.MAX_CHARS_PER_PAGE == 0:
@@ -920,7 +921,7 @@ class MessageWindow(Window):
         if self.is_visible == False:
             return
         # 現在表示しているページのcur_posまでの文字を描画
-        for i in range(self.cur_pos):
+        for i in range(int(self.cur_pos)):
             ch = self.text[self.cur_page * self.MAX_CHARS_PER_PAGE + i]
             if ch == "/" or ch == "%" or ch == "$":
                 continue  # 制御文字は表示しない
