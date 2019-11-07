@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<sports>
+    <sport>
+        <name>サッカー</name>
+        <origin>イングランド</origin>
+    </sport>
+    <sport>
+        <name>野球</name>
+        <origin>アメリカ</origin>
+    </sport>
+</sports>
