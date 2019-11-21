@@ -2,8 +2,10 @@
 from __future__ import print_function
 
 import sys
-import time
 import subprocess
+import time
+from plyer import notification
+
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
@@ -30,8 +32,16 @@ class MyHandler(PatternMatchingEventHandler):
         pass
 
     def on_modified(self, event):
+        print("\n\n")        
         print("▼▽▼▽▼▽▼▽▼▽▼modified▼▽▼▽▼▽▼▽▼▽▼")
+        print("\n\n")
         self._run_command()
+        # 成功か失敗かで分岐させたい
+        notification.notify(
+            title='pytest',
+            message='ユニットテストが完了しました',
+            app_name='autorun_pytest.py',
+        )
 
 
 def watch(path, command, extension):
