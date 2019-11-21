@@ -2,6 +2,8 @@
 from __future__ import print_function
 
 import os
+import pygame
+import pygame.mixer
 import sys
 import subprocess
 import time
@@ -13,14 +15,17 @@ from watchdog.events import PatternMatchingEventHandler
 # 例) ~/roguelike/tests/unit$ autorun_pytest.py ~/roguelike pytest -v py
 
 HOME_DIR = os.path.split(os.path.abspath(__file__))[0]
-ICON_SUCCESS = os.path.join(HOME_DIR,"data","success.png")
-ICON_FAILED  = os.path.join(HOME_DIR,"data","failed.png")
+ICON_SUCCESS = os.path.join(HOME_DIR, "data", "success.png")
+ICON_FAILED  = os.path.join(HOME_DIR, "data", "failed.png")
+SOUND_SUCCESS = os.path.join(HOME_DIR, "data", "success.wav")
+SOUND_FAILED  = os.path.join(HOME_DIR, "data", "failed.wav")
 
 class MyHandler(PatternMatchingEventHandler):
     def __init__(self, command, patterns):
         super(MyHandler, self).__init__(patterns=patterns)
         self.command = command
         self.std = ""
+        pygame.mixer.init()
 
     def _run_command(self):
         self.std = subprocess.call([self.command, "-sv"])
@@ -48,16 +53,19 @@ class MyHandler(PatternMatchingEventHandler):
             notify_message = '*成功*しました!!'
             notify_title = 'pytest'
             notify_icon = ICON_SUCCESS
+            sound = pygame.mixer.Sound(SOUND_SUCCESS)
         else:
             notify_message = '*失敗*ユニットテストが' + error_count + 'つ失敗しました'
             notify_title = 'pytest'
             notify_icon =ICON_FAILED
+            sound = pygame.mixer.Sound(SOUND_FAILED)
         notification.notify(
             title=notify_title,
             message=notify_message,
             app_name='autorun_pytest.py',
             app_icon=notify_icon,
         )
+        sound.play()
 
 
 def watch(path, command, extension):
