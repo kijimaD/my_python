@@ -50,22 +50,23 @@ class MyHandler(PatternMatchingEventHandler):
 
         error_count = str(self.std)
         if error_count == '0':
-            notify_message = '*成功*しました!!'
-            notify_title = 'pytest'
-            notify_icon = ICON_SUCCESS
+            # notify_message = '*成功*しました!!'
+            # notify_title = 'pytest'
+            # notify_icon = ICON_SUCCESS
             sound = pygame.mixer.Sound(SOUND_SUCCESS)
+            sound.play()
         else:
-            notify_message = '*失敗*ユニットテストが' + error_count + 'つ失敗しました'
-            notify_title = 'pytest'
-            notify_icon =ICON_FAILED
-            sound = pygame.mixer.Sound(SOUND_FAILED)
-        notification.notify(
-            title=notify_title,
-            message=notify_message,
-            app_name='autorun_pytest.py',
-            app_icon=notify_icon,
-        )
-        sound.play()
+            pass
+            # notify_message = '*失敗*ユニットテストが' + error_count + 'つ失敗しました'
+            # notify_title = 'pytest'
+            # notify_icon =ICON_FAILED
+            # sound = pygame.mixer.Sound(SOUND_FAILED)
+        # notification.notify(
+        #     title=notify_title,
+        #     message=notify_message,
+        #     app_name='autorun_pytest.py',
+        #     app_icon=notify_icon,
+        # )
 
 
 def watch(path, command, extension):
