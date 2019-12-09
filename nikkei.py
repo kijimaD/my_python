@@ -68,7 +68,7 @@ class Scrape():
             print('title:', title)
             print('content:', content)
             print('pubtime:', pubtime)
-            sql = """insert into news (title, content, pubdate) values
+            sql = """insert into django_test_news (title, content, pubdate) values
             (%(title)s, %(content)s, %(pubdate)s);
             """
             cursor.execute(sql, {'title': title, 'content': content, 'pubdate': pubtime})
@@ -84,11 +84,11 @@ class Scrape():
 
     def db_connect():
         connection = psycopg2.connect(
-            user = 'kijima',
-            password = 'digital',
-            host = 'localhost',
-            port = '5432',
-            database = 'django_test')
+            user='kijima',
+            password='digital',
+            host='localhost',
+            port='5432',
+            database='django_test')
         return connection
 
 
