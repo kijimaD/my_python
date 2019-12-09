@@ -1,6 +1,8 @@
 import sys
 import time
 import datetime
+import os
+import psycopg2
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from urllib import request
@@ -17,6 +19,7 @@ import env
 class Scrape():
     def __init__(self):
         self.soup = 0
+
     def site_access():
         driver = webdriver.Chrome("chromedriver")
         driver.get("https://trade.03trade.com/web/")
@@ -47,9 +50,12 @@ class Scrape():
         driver.find_element_by_xpath('/html/body/main/div/div[2]/form[2]/div[3]/p/label/input').click()
         driver.find_element_by_xpath('/html/body/main/div/div[2]/form[2]/div[3]/p/label/input').click()
         driver.find_element_by_xpath('/html/body/main/div/div[2]/form[2]/div[2]/p/span/input').click()
-        time.sleep(2)
+        time.sleep(1)
 
-    def scrape(input):
+        # ページまるごと取得してreturn
+
+    def scrape(input, connection):
+        cursor = connection.cursor()
         soup = BeautifulSoup(input, 'html.parser')
         titles = []
         titles = soup.find_all('h2')
@@ -62,16 +68,30 @@ class Scrape():
             print('title:', title)
             print('content:', content)
             print('pubtime:', pubtime)
+            sql = """insert into news (title, content, pubdate) values
+            (%(title)s, %(content)s, %(pubdate)s);
+            """
+            cursor.execute(sql, {'title': title, 'content': content, 'pubdate': pubtime})
+            connection.commit()
 
     def test_input():
         test_data = open("/home/kijima/Desktop/test.html", "r")
         return test_data
         test_data.close()
 
-
-    def response_input(self):
+    def response_input():
         pass
 
+    def db_connect():
+        connection = psycopg2.connect(
+            user = 'kijima',
+            password = 'digital',
+            host = 'localhost',
+            port = '5432',
+            database = 'django_test')
+        return connection
 
-input = Scrape.test_input()
-Scrape.scrape(input)
+
+connection = Scrape.db_connect()
+raw_input = Scrape.test_input()
+Scrape.scrape(raw_input, connection)
