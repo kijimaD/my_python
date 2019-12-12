@@ -52,7 +52,8 @@ class Scrape():
         driver.find_element_by_xpath('/html/body/main/div/div[2]/form[2]/div[2]/p/span/input').click()
         time.sleep(1)
 
-        # ページまるごと取得してreturn
+        source = driver.page_source
+        return source
 
     def scrape(input, connection):
         cursor = connection.cursor()
@@ -62,9 +63,13 @@ class Scrape():
         contents = []
         contents = soup.find_all('div', class_="Honbun")
         for p in range(len(titles)):
-            title = titles[p].text
+            if p == 0:
+                title = titles[p].text + '■■■■■'
+            else:
+                title = titles[p].text
             content = contents[p].text
-            pubtime = datetime.date.today()
+            # pubtime = datetime.date.today()
+            pubtime = datetime.datetime.now()
             print('title:', title)
             print('content:', content)
             print('pubtime:', pubtime)
@@ -93,5 +98,7 @@ class Scrape():
 
 
 connection = Scrape.db_connect()
-raw_input = Scrape.test_input()
+# raw_input = Scrape.test_input()
+raw_input = Scrape.site_access()
 Scrape.scrape(raw_input, connection)
+exit()
