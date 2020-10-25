@@ -68,8 +68,8 @@ class Scrape():
             else:
                 title = titles[p].text
             content = contents[p].text
-            # pubtime = datetime.date.today()
-            pubtime = datetime.datetime.now()
+            pubtime = datetime.date.today()
+            # pubtime = datetime.datetime.now()
             print('title:', title)
             print('content:', content)
             print('pubtime:', pubtime)

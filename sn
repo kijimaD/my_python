@@ -1,0 +1,43 @@
+#! /usr/bin/python3
+# -*- coding: utf-8 -*-
+
+# 通知app
+# $ sn command
+# ~/env.pyに、slack_urlを入れてから実行
+
+import os
+import slackweb
+import sys
+import subprocess
+import socket
+import time
+
+sys.path.append(os.environ['HOME'])
+import env
+
+slack = slackweb.Slack(url=env.slack_url)
+
+
+def notice(msg):
+    slack.notify(text=msg)
+
+
+# 引数から実行するコマンドを取得
+command = sys.argv[1:]
+command_text = (''.join(command))
+
+t1 = time.time()
+host = socket.gethostname()
+
+# 実行前通知
+start_text = "{}:$ {}"
+notice(start_text.format(host, command_text))
+
+# コマンド実行、ユーザーのカレントディレクトリ（os.getcwd()）で実行するようにしている。
+subprocess.run(command, cwd="{}/".format(os.getcwd()))
+
+t2 = time.time()
+elapsed_time = '{:.2f}'.format(t2 - t1)
+# 実行後通知
+end_text = "実行終了 ({}s)"
+notice(end_text.format(elapsed_time))
